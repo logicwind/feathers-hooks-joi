@@ -7,7 +7,7 @@ const assert = require('chai').assert;
 const errors = require('@feathersjs/errors');
 const validate = require('../index');
 
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const name = Joi.string().trim().regex(/^[\sa-zA-Z0-9]{5,30}$/).required();
 const password = Joi.string().trim().min(2).max(30).required();
 const schema = Joi.object().keys({
@@ -25,38 +25,37 @@ const errsRaw = {
 const errsType = {
   name: '"name" must consist of letters, digits or spaces.',
   password: '"password" must be 2 or more chars.',
-  confirmPassword: '"Confirm password" must be 2 or more chars.'
+  confirmPassword: '"confirmPassword" must be 2 or more chars.'
 };
 
 const errsGeneric = {
   name: '"name" is badly formed.',
   password: '"password" is badly formed.',
-  confirmPassword: '"Confirm password" is badly formed.'
+  confirmPassword: '"confirmPassword" is badly formed.'
 };
 
 const errsSubstr = {
   name: '"name" is badly formed.',
   password: '"password" must be 2 or more chars.',
-  confirmPassword: '"Confirm password" must be 2 or more chars.'
+  confirmPassword: '"confirmPassword" must be 2 or more chars.'
 };
-
 const errsTypeMongoose = {
   name: {
     message: '"name" must consist of letters, digits or spaces.',
     name: 'ValidatorError',
-    path: 'name',
+    path: ['name'],
     type: 'string.regex.base'
   },
   password: {
     message: '"password" must be 2 or more chars.',
     name: 'ValidatorError',
-    path: 'password',
+    path: ['password'],
     type: 'string.min'
   },
   confirmPassword: {
-    message: '"Confirm password" must be 2 or more chars.',
+    message: '"confirmPassword" must be 2 or more chars.',
     name: 'ValidatorError',
-    path: 'confirmPassword',
+    path: ['confirmPassword'],
     type: 'string.min'
   }
 };
@@ -129,7 +128,7 @@ describe('invalid data - form UI', () => {
         done();
       });
     };
-
+    
     assert.throws(fcn, errors.BadRequest, JSON.stringify(errsGeneric));
     done();
   });
