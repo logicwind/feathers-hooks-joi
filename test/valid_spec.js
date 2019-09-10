@@ -29,21 +29,18 @@ describe('valid values', () => {
     });
 
     it('does not convert if convert=false', (done) => {
-      validate.form(schema, joiOptions, undefined)(hook, function (err, hook) {
-        assert.equal(err, null);
-        assert.deepEqual(hook.data, values);
-        done();
-      });
+      const context = validate.form(schema, joiOptions, undefined)(hook)
+      assert.deepEqual(context.data, values);
+      done();
+
     });
 
     it('does convert if convert=true', (done) => {
       joiOptions.convert = true;
 
-      validate.form(schema, joiOptions, undefined)(hook, function (err, hook) {
-        assert.equal(err, null);
-        assert.deepEqual(hook.data, converted);
-        done();
-      });
+      const context = validate.form(schema, joiOptions, undefined)(hook)
+      assert.deepEqual(context.data, converted);
+      done();
     });
   });
 
@@ -53,23 +50,20 @@ describe('valid values', () => {
     });
 
     it('does not convert if convert=false', (done) => {
-      validate.form(schema, joiOptions, undefined)(hook, function (err, hook) {
-        assert.equal(err, null);
-        assert.deepEqual(hook.data, values);
-        done();
-      });
+      const context = validate.form(schema, joiOptions, undefined)(hook)
+      assert.deepEqual(context.data, values);
+      done();
     });
 
     it('does convert if convert=true', (done) => {
       joiOptions.convert = true;
 
-      validate.form(schema, joiOptions, undefined)(hook, function (err, hook) {
-        assert.equal(err, null);
-        assert.deepEqual(hook.data, converted);
-        done();
-      });
+      const context = validate.form(schema, joiOptions, undefined)(hook)
+      assert.deepEqual(context.data, converted);
+      done();
     });
   });
+
 
   describe('patch hook', () => {
     beforeEach(function () {
@@ -77,21 +71,17 @@ describe('valid values', () => {
     });
 
     it('does not convert if convert=false', (done) => {
-      validate.form(schema, joiOptions, undefined)(hook, function (err, hook) {
-        assert.equal(err, null);
-        assert.deepEqual(hook.data, values);
-        done();
-      });
+      const context = validate.form(schema, joiOptions, undefined)(hook)
+      assert.deepEqual(context.data, values);
+      done();
     });
 
     it('does convert if convert=true', (done) => {
       joiOptions.convert = true;
 
-      validate.form(schema, joiOptions, undefined)(hook, function (err, hook) {
-        assert.equal(err, null);
-        assert.deepEqual(hook.data, converted);
-        done();
-      });
+      const context = validate.form(schema, joiOptions, undefined)(hook)
+      assert.deepEqual(context.data, converted);
+      done();
     });
   });
 });

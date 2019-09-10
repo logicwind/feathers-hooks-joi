@@ -5,25 +5,22 @@ const joiErrorsForForms = require('./joi-errors-for-forms');
 
 
 function validator(joiSchema, joiOptions, translator, ifTest) {
-  return function validatorInner(hook, next) {
+  return function validatorInner(hook) {
     utils.checkContext(hook, 'before', ['create', 'update', 'patch'], 'validate-joi');
     const values = utils.getItems(hook);
 
-    Joi.validate(values, joiSchema, joiOptions,
-      function (joiErr, convertedValues) {
-        const formErrors = translator(joiErr);
-        if (formErrors) {
-          // Hacky, but how else without a custom assert?
-          const msg = ifTest ? JSON.stringify(formErrors) : 'Invalid data';
-          throw new errors.BadRequest(msg, { errors: formErrors });
-        }
+    const { error, value } = Joi.validate(values, joiSchema, joiOptions);
+    const formErrors = translator(error);
+    if (formErrors) {
+      // Hacky, but how else without a custom assert?
+      const msg = ifTest ? JSON.stringify(formErrors) : 'Invalid data';
+      throw new errors.BadRequest(msg, { errors: formErrors });
+    }
 
-        if (joiOptions.convert === true) {
-          utils.replaceItems(hook, convertedValues);
-        }
-        next(null, hook);
-      }
-    );
+    if (joiOptions.convert === true) {
+      utils.replaceItems(hook, value);
+    }
+    return hook
   };
 }
 
